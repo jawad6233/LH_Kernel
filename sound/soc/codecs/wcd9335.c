@@ -13784,8 +13784,7 @@ static ssize_t headphones_boost_store(struct kobject *kobj,
 		struct kobj_attribute *attr, const char *buf, size_t count)
 {
 
-	int input_l = 0;
-	int input_r = 0;
+	int input_l, input_r;
 
 	sscanf(buf, "%d %d", &input_l, &input_r);
 
@@ -13824,8 +13823,7 @@ static ssize_t headphones_pa_boost_show(struct kobject *kobj,
 static ssize_t headphones_pa_boost_store(struct kobject *kobj,
 		struct kobj_attribute *attr, const char *buf, size_t count)
 {
-	unsigned int input_l = 0;
-	unsigned int input_r = 0;
+	unsigned int input_l, input_r;
 	struct tasha_priv *tasha = snd_soc_codec_get_drvdata(sound_control_codec_ptr);
 
 	sscanf(buf, "%d %d", &input_l, &input_r);
@@ -13864,14 +13862,14 @@ static ssize_t mic_boost_show(struct kobject *kobj,
 static ssize_t mic_boost_store(struct kobject *kobj,
 		struct kobj_attribute *attr, const char *buf, size_t count)
 {
-	int input = 0;
+	int input;
 
 	sscanf(buf, "%d", &input);
 
 	if (!snd_ctrl_enabled)
 		return count;
 
-	if (input < -10 || input > 10)
+	if (input < -10 || input > 20)
 		input = 0;
 
 	snd_soc_write(sound_control_codec_ptr, WCD9335_CDC_RX0_RX_VOL_CTL, input);
@@ -13894,14 +13892,14 @@ static ssize_t speaker_boost_show(struct kobject *kobj,
 static ssize_t speaker_boost_store(struct kobject *kobj,
 		struct kobj_attribute *attr, const char *buf, size_t count)
 {
-	int input = 0;
+	int input;
 
 	sscanf(buf, "%d", &input);
 
 	if (!snd_ctrl_enabled)
 		return count;
 
-	if (input < -10 || input > 10)
+	if (input < -10 || input > 20)
 		input = 0;
 
 	snd_soc_write(sound_control_codec_ptr, WCD9335_CDC_RX6_RX_VOL_CTL, input);
