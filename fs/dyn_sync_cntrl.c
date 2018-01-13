@@ -152,7 +152,7 @@ static struct notifier_block dyn_fsync_notifier =
 };
 
 static struct kobj_attribute dyn_fsync_active_attribute = 
-	__ATTR(Dyn_fsync_active, 0664,
+	__ATTR(Dyn_fsync_active, 0666,
 		dyn_fsync_active_show,
 		dyn_fsync_active_store);
 
@@ -253,5 +253,5 @@ module_init(dyn_fsync_init);
 module_exit(dyn_fsync_exit);
 
 MODULE_AUTHOR("andip71");
-MODULE_DESCRIPTION("dynamic fsync - automatic fs sync optimization for msm8974");
+MODULE_DESCRIPTION("dynamic fsync - automatic fs sync optimization");
 MODULE_LICENSE("GPL v2");
