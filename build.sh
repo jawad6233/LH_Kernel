@@ -1,114 +1,159 @@
 #!/bin/bash
-clear
-echo "#########################################"
-echo "##### LOUP Kernel - Build Script ########"
-echo "#########################################"
+#
+# FireBuster Kernel build script
+#
+# Copyright (C) 2017 Luan Halaiko (tecnotailsplays@gmail.com)
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-# Make statement declaration
-# ==========================
-# If compilation uses menuconfig, make operation will use .config 
-# instead of santoni_defconfig directly.
-MAKE_STATEMENT=make
+#colors
+black='\033[0;30m'
+red='\033[0;31m'
+green='\033[0;32m'
+brown='\033[0;33m'
+blue='\033[0;34m'
+purple='\033[1;35m'
+cyan='\033[0;36m'
+nc='\033[0m'
 
-# ENV configuration
-# =================
-export LOUP_WORKING_DIR=$(dirname "$(pwd)")
+#directories
+KERNEL_DIR=$PWD
+KERN_IMG=$KERNEL_DIR/arch/arm64/boot/Image.gz-dtb
+ZIP_DIR=$KERNEL_DIR/repack
+CONFIG_DIR=$KERNEL_DIR/arch/arm64/configs
 
+#export
+export CROSS_COMPILE="$HOME/kernel/linaro/bin/aarch64-linux-gnu-"
+export ARCH=arm64
+export SUBARCH=arm64
+export KBUILD_BUILD_USER="LuanHalaiko"
+export KBUILD_BUILD_HOST="TestBuilder"
+export KBUILD_LOUP_CFLAGS="-Wno-misleading-indentation -Wno-bool-compare -mtune=cortex-a53 -march=armv8-a+crc+simd+crypto -mcpu=cortex-a53 -O2"
 
-# Menuconfig configuration
-# ================
-# If -no-menuconfig flag is present we will skip the kernel configuration step.
-# Make operation will use santoni_defconfig directly.
-if [[ "$*" == *"-no-menuconfig"* ]]
-then
-  NO_MENUCONFIG=1
-  MAKE_STATEMENT="$MAKE_STATEMENT KCONFIG_CONFIG=./arch/arm64/configs/santoni_defconfig"
+#misc
+CONFIG=santoni_defconfig
+THREAD="-j$(grep -c ^processor /proc/cpuinfo)"
+
+#ASCII art
+echo -e "$cyan############################ WELCOME TO ##############################"
+echo -e "             ______ _          ____            _             " 
+echo -e "            |  ____(_)        |  _ \          | |            "
+echo -e "            | |__   _ _ __ ___| |_) |_   _ ___| |_ ___ _ __  "
+echo -e "            |  __| | | '__/ _ \  _ <| | | / __| __/ _ \ '__| "
+echo -e "            | |    | | | |  __/ |_) | |_| \__ \ ||  __/ |    "
+echo -e "            |_|    |_|_|  \___|____/ \__,_|___/\__\___|_|    "
+echo -e "                                                             "
+echo -e "\n############################# BUILDER ################################$nc"
+
+#main script
+while true; do
+echo -e "\n$green[1]Build kernel"
+echo -e "[2]Regenerate defconfig"
+echo -e "[3]Source cleanup"
+echo -e "[4]Create flashable zip"
+echo -e "[5]Quit$nc"
+echo -ne "\n$blue(i)Please enter a choice[1-6]:$nc "
+
+read choice
+
+if [ "$choice" == "1" ]; then
+echo -e "\n$green[a]Build Superclocked version"
+echo -ne "\n$blue--LH--$nc "
+
+read cpu
+
+if [ "$cpu" == "b" ]; then
+patch -p1 < 0001-nuke-cpu-oc.patch &>/dev/null
 fi
+  BUILD_START=$(date +"%s")
+  DATE=`date`
+  echo -e "\n$cyan#######################################################################$nc"
+  echo -e "$brown(i)Build started at $DATE$nc"
+  make $CONFIG $THREAD &>/dev/null
+  make $THREAD &>buildlog.txt & pid=$!
+  spin[0]="$blue-"
+  spin[1]="\\"
+  spin[2]="|"
+  spin[3]="/$nc"
 
-
-# CCACHE configuration
-# ====================
-# If you want you can install ccache to speedup recompilation time.
-# In ubuntu just run "sudo apt-get install ccache".
-# By default CCACHE will use 2G, change the value of CCACHE_MAX_SIZE
-# to meet your needs.
-if [ -x "$(command -v ccache)" ]
-then
-  # If you want to clean the ccache
-  # run this script with -clear-ccache
-  if [[ "$*" == *"-clear-ccache"* ]]
-  then
-    echo -e "\n\033[0;31m> Cleaning $LOUP_WORKING_DIR/.ccache contents\033[0;0m" 
-    rm -rf "$LOUP_WORKING_DIR/.ccache"
+  echo -ne "$blue[Please wait...] ${spin[0]}$nc"
+  while kill -0 $pid &>/dev/null
+  do
+    for i in "${spin[@]}"
+    do
+          echo -ne "\b$i"
+          sleep 0.1
+    done
+  done
+  if ! [ -a $KERN_IMG ]; then
+    echo -e "\n$red(!)Kernel compilation failed, See buildlog to fix errors $nc"
+    echo -e "$red#######################################################################$nc"
+    exit 1
   fi
-  # If you want to build *without* using ccache
-  # run this script with -no-ccache flag
-  if [[ "$*" != *"-no-ccache"* ]] 
-  then
-    export USE_CCACHE=1
-    export CCACHE_DIR="$LOUP_WORKING_DIR/.ccache"
-    export CCACHE_MAX_SIZE=2G
-    echo -e "\n> $(ccache -M $CCACHE_MAX_SIZE)"
-    echo -e "\n\033[0;32m> Using ccache, to disable it run this script with -no-ccache\033[0;0m\n"
-  else
-    echo -e "\n\033[0;31m> NOT Using ccache, to enable it run this script without -no-ccache\033[0;0m\n"
+  $DTBTOOL -2 -o $KERNEL_DIR/arch/arm/boot/dt.img -s 2048 -p $KERNEL_DIR/scripts/dtc/ $KERNEL_DIR/arch/arm/boot/dts/ &>/dev/null &>/dev/null
+if [ "$cpu" == "b" ]; then
+patch -p1 -R < 0001-nuke-cpu-oc.patch &>/dev/null
+fi
+  BUILD_END=$(date +"%s")
+  DIFF=$(($BUILD_END - $BUILD_START))
+  echo -e "\n$brown(i)zImage and dtb compiled successfully.$nc"
+  echo -e "$cyan#######################################################################$nc"
+  echo -e "$purple(i)Total time elapsed: $(($DIFF / 60)) minute(s) and $(($DIFF % 60)) seconds.$nc"
+  echo -e "$cyan#######################################################################$nc"
+fi
+
+
+if [ "$choice" == "2" ]; then
+  echo -e "\n$cyan#######################################################################$nc"
+  make $CONFIG
+  cp .config arch/arm64/configs/$CONFIG
+  echo -e "$purple(i)Defconfig generated.$nc"
+  echo -e "$cyan#######################################################################$nc"
+fi
+
+
+if [ "$choice" == "3" ]; then
+  echo -e "\n$cyan#######################################################################$nc"
+  rm -f $DT_IMG
+  make clean &>/dev/null
+  make mrproper &>/dev/null
+  echo -e "$purple(i)Kernel source cleaned up.$nc"
+  echo -e "$cyan#######################################################################$nc"
+fi
+
+
+if [ "$choice" == "4" ]; then
+  echo -e "\n$cyan#######################################################################$nc"
+  if [ "$cpu" == "b" ]; then
+  patch -p1 < 0001-nuke-cpu-oc.patch &>/dev/null
   fi
-else
-  echo -e "\n\033[0;33m> [Optional] ccache not installed. You can install it (in ubuntu) using 'sudo apt-get install ccache'\033[0;0m\n"
-fi
-
-# Want to use a different toolchain? (Linaro, UberTC, etc)
-# ==================================
-# point CROSS_COMPILE to the folder of the desired toolchain
-# don't forget to specify the prefix. Mine is: aarch64-linux-android-
-CROSS_COMPILE=$LOUP_WORKING_DIR/aarch64-linux-android-6.x/bin/aarch64-linux-android-
-
-# Are we using ccache?
-if [ -n "$USE_CCACHE" ] 
-then
-  CROSS_COMPILE="ccache $CROSS_COMPILE"  
-fi
-
-# Start menuconfig
-# ================
-# Use -no-menuconfig flag to skip the kernel configuration step.
-# It will override any .config file present.
-if [ -n "$NO_MENUCONFIG" ]
-then
-  echo -e "> Skipping menuconfig...\n"
-  echo -e "> Starting kernel compilation using santoni_defconfig file directly...\n"
-else
-  if [ -f ".config" ]
-  then    
-    echo -e "\033[0;32m> Config file already exists\033[0;0m\n"
-  else
-    echo -e "\033[0;31m> Config file not found, copying santoni_defconfig as .config...\033[0;0m\n" 
-    cp arch/arm64/configs/santoni_defconfig .config
+  cd $ZIP_DIR
+  make clean &>/dev/null
+  cp $KERN_IMG $ZIP_DIR/boot/zImage
+  make &>/dev/null
+  make sign &>/dev/null
+  cd ..
+  if [ "$cpu" == "b" ]; then
+  patch -p1 -R < 0001-nuke-cpu-oc.patch &>/dev/null
   fi
-  echo -e "> Opening .config file...\n"
-  ARCH=arm64 SUBARCH=arm64 CROSS_COMPILE=$CROSS_COMPILE make menuconfig
-  echo -e "> Starting kernel compilation using .config file...\n"
+  echo -e "$purple(i)Flashable zip generated under $ZIP_DIR.$nc"
+  echo -e "$cyan#######################################################################$nc"
 fi
 
-start=$SECONDS
 
-# Want custom kernel flags?
-# =========================
-# KBUILD_LOUP_CFLAGS: Here you can set custom compilation 
-# flags to turn off unwanted warnings, or even set a 
-# different optimization level. 
-# To see how it works, check the Makefile ... file, 
-# line 625 to 628, located in the root dir of this kernel.
-KBUILD_LOUP_CFLAGS="-Wno-misleading-indentation -Wno-bool-compare -mtune=cortex-a53 -march=armv8-a+crc+simd+crypto -mcpu=cortex-a53 -O2" 
-KBUILD_LOUP_CFLAGS=$KBUILD_LOUP_CFLAGS ARCH=arm64 SUBARCH=arm64 CROSS_COMPILE=$CROSS_COMPILE $MAKE_STATEMENT -j5
-
-# Get current kernel version
-LOUP_VERSION=$(head -n3 Makefile | sed -E 's/.*(^\w+\s[=]\s)//g' | xargs | sed -E 's/(\s)/./g')
-echo -e "\n\n> Packing Loup Kernel v$LOUP_VERSION\n\n"
-# Pack the kernel as a flashable TWRP zip. Nougat Edition
-$LOUP_WORKING_DIR/AnyKernel2/build.sh $LOUP_VERSION O
-
-end=$SECONDS
-duration=$(( end - start ))
-printf "\n\033[0;33m> Completed in %dh:%dm:%ds\n" $(($duration/3600)) $(($duration%3600/60)) $(($duration%60))
-echo -e "=====================================\n"
+if [ "$choice" == "5" ]; then
+ exit 1
+fi
+done
