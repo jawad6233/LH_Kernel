@@ -1,8 +1,8 @@
 #!/bin/bash
 #
-# FireBuster Kernel build script
+# LH Kernel build script
 #
-# Copyright (C) 2017 Luan Halaiko (tecnotailsplays@gmail.com)
+# Copyright (C) 2017 Luan Halaiko and Ashishm94 (tecnotailsplays@gmail.com)
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -39,7 +39,7 @@ export CROSS_COMPILE="$HOME/kernel/linaro/bin/aarch64-linux-gnu-"
 export ARCH=arm64
 export SUBARCH=arm64
 export KBUILD_BUILD_USER="LuanHalaiko"
-export KBUILD_BUILD_HOST="TestBuilder"
+export KBUILD_BUILD_HOST="TimeMachine"
 export KBUILD_LOUP_CFLAGS="-Wno-misleading-indentation -Wno-bool-compare -mtune=cortex-a53 -march=armv8-a+crc+simd+crypto -mcpu=cortex-a53 -O2"
 
 #misc
@@ -47,15 +47,14 @@ CONFIG=santoni_defconfig
 THREAD="-j$(grep -c ^processor /proc/cpuinfo)"
 
 #ASCII art
-echo -e "$cyan############################ WELCOME TO ##############################"
-echo -e "             ______ _          ____            _             " 
-echo -e "            |  ____(_)        |  _ \          | |            "
-echo -e "            | |__   _ _ __ ___| |_) |_   _ ___| |_ ___ _ __  "
-echo -e "            |  __| | | '__/ _ \  _ <| | | / __| __/ _ \ '__| "
-echo -e "            | |    | | | |  __/ |_) | |_| \__ \ ||  __/ |    "
-echo -e "            |_|    |_|_|  \___|____/ \__,_|___/\__\___|_|    "
-echo -e "                                                             "
-echo -e "\n############################# BUILDER ################################$nc"
+echo -e "$cyan############################ WELCOME TO #############################"
+echo -e "                    __                   __  __      __  __  __           "
+echo -e "                   / /   /\  /\   /\ /\ /__\/__\  /\ \ \/__\/ /           "
+echo -e "                  / /   / /_/ /  / //_//_\ / \// /  \/ /_\ / /            "
+echo -e "                 / /___/ __  /  / __ \//__/ _  \/ /\  //__/ /___          "
+echo -e "                 \____/\/ /_/   \/  \/\__/\/ \_/\_\ \/\__/\____/          "
+echo -e "                                                                          "
+echo -e "\n############################# BUILDER ###############################$nc"
 
 #main script
 while true; do
@@ -69,7 +68,7 @@ echo -ne "\n$blue(i)Please enter a choice[1-6]:$nc "
 read choice
 
 if [ "$choice" == "1" ]; then
-echo -e "\n$green[a]Build Superclocked version"
+echo -e "\n$green[a]Build Oreo version"
 echo -ne "\n$blue--LH--$nc "
 
 read cpu
