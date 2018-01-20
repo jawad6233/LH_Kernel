@@ -418,7 +418,7 @@
 				qcom,qpnp-ibb-use-default-voltage;
 				qcom,qpnp-ibb-init-voltage = <5500000>;
 				qcom,qpnp-ibb-init-amoled-voltage = <4000000>;
-				qcom,qpnp-ibb-init-lcd-voltage = <6000000>;
+				qcom,qpnp-ibb-init-lcd-voltage = <5500000>;
 
 				qcom,qpnp-ibb-soft-start = <1000>;
 
@@ -451,7 +451,7 @@
 				qcom,qpnp-lab-use-default-voltage;
 				qcom,qpnp-lab-init-voltage = <5500000>;
 				qcom,qpnp-lab-init-amoled-voltage = <4600000>;
-				qcom,qpnp-lab-init-lcd-voltage = <6000000>;
+				qcom,qpnp-lab-init-lcd-voltage = <5500000>;
 
 				qcom,qpnp-lab-soft-start = <800>;
 
