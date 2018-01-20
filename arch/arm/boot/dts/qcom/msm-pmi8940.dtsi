@@ -550,7 +550,7 @@
 						"torch0_trigger";
 				qcom,max-current = <200>;
 				qcom,id = <0>;
-				qcom,current = <195>;
+				qcom,current = <120>;
 			};
 
 			pmi8940_torch1: qcom,torch_1 {
@@ -560,7 +560,7 @@
 						"torch1_trigger";
 				qcom,max-current = <200>;
 				qcom,id = <1>;
-				qcom,current = <195>;
+				qcom,current = <120>;
 			};
 
 			pmi8940_switch: qcom,switch {
