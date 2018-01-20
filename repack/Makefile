@@ -1,6 +1,6 @@
 NAME ?= Full-LH
 
-VERSION ?= RM
+VERSION ?= OREO
 
 DATE := $(shell date +'%Y%m%d')
 
