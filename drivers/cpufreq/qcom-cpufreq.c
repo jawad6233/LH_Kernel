@@ -29,7 +29,7 @@
 #include <linux/of.h>
 #include <trace/events/power.h>
 
-static unsigned long arg_cpu_max_c1 = 1516800;
+static unsigned long arg_cpu_max_c1 = 1401000;
 static int __init cpufreq_read_cpu_max_c1(char *cpu_max_c1)
 {
 	unsigned long ui_khz;
