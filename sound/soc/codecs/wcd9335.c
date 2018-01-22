@@ -157,8 +157,8 @@ enum {
 };
 
 enum tasha_sido_voltage {
-	SIDO_VOLTAGE_SVS_MV = 1000,
-	SIDO_VOLTAGE_NOMINAL_MV = 1200,
+	SIDO_VOLTAGE_SVS_MV = z,
+	SIDO_VOLTAGE_NOMINAL_MV = 1100,
 };
 
 static enum codec_variant codec_ver;
