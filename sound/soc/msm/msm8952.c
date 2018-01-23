@@ -55,9 +55,9 @@
 
 
 #if defined(CONFIG_AW87319)
-#define EXT_CLASS_D_EN_DELAY 13000
-#define EXT_CLASS_D_DIS_DELAY 3000
-#define EXT_CLASS_D_DELAY_DELTA 2000
+#define EXT_CLASS_D_EN_DELAY 12000
+#define EXT_CLASS_D_DIS_DELAY 2000
+#define EXT_CLASS_D_DELAY_DELTA 1500
 
 extern unsigned char AW87319_Audio_Speaker(void);
 #endif
