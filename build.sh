@@ -40,7 +40,7 @@ export ARCH=arm64
 export SUBARCH=arm64
 export KBUILD_BUILD_USER="LuanHalaiko"
 export KBUILD_BUILD_HOST="TimeMachine"
-export KBUILD_LOUP_CFLAGS="-Wno-misleading-indentation -Wno-bool-compare -march=armv8-a+crc+simd+crypto -O2"
+export KBUILD_LOUP_CFLAGS="-Wno-misleading-indentation -Wno-bool-compare -O2"
 
 #misc
 CONFIG=santoni_defconfig
