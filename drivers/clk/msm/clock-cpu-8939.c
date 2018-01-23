@@ -35,11 +35,6 @@
 #include "clock.h"
 #include <dt-bindings/clock/msm-cpu-clocks-8939.h>
 
-#ifdef CONFIG_PVS_LEVEL_INTERFACE
-static char pvs_level[20] = {0};
-module_param_string(pvs_level, pvs_level, ARRAY_SIZE(pvs_level), S_IRUGO); 
-#endif
-
 DEFINE_VDD_REGS_INIT(vdd_cpu_bc, 1);
 DEFINE_VDD_REGS_INIT(vdd_cpu_lc, 1);
 DEFINE_VDD_REGS_INIT(vdd_cpu_cci, 1);
@@ -857,10 +852,6 @@ static int clock_a53_probe(struct platform_device *pdev)
 		snprintf(prop_name, ARRAY_SIZE(prop_name),
 					"qcom,speed%d-bin-v%d-%s",
 					speed_bin, version, mux_names[mux_id]);
-
-#ifdef CONFIG_PVS_LEVEL_INTERFACE
-	snprintf(pvs_level, ARRAY_SIZE(pvs_level), "%d-v%d", perfclspeedbin, pvs_ver);
-#endif
 
 		rc = of_get_fmax_vdd_class(pdev, &cpuclk[mux_id]->c,
 								prop_name);
