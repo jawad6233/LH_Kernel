@@ -40,7 +40,7 @@ export ARCH=arm64
 export SUBARCH=arm64
 export KBUILD_BUILD_USER="LuanHalaiko"
 export KBUILD_BUILD_HOST="TimeStopMachine"
-export KBUILD_LOUP_CFLAGS="-Wno-misleading-indentation -Wno-bool-compare -mtune=cortex-a53 -march=armv8-a+crc+simd+crypto -mcpu=cortex-a53 -O2"
+export KBUILD_LOUP_CFLAGS="-Wno-misleading-indentation -Wno-bool-compare -march=armv8-a+crc+simd+crypto -O2"
 
 #misc
 CONFIG=santoni_defconfig
