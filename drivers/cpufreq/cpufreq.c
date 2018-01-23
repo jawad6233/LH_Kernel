@@ -28,6 +28,7 @@
 #include <linux/slab.h>
 #include <linux/suspend.h>
 #include <linux/tick.h>
+#include <linux/pm_opp.h>
 #ifdef CONFIG_SMP
 #include <linux/sched.h>
 #endif
