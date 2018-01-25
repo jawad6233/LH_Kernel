@@ -696,7 +696,7 @@
 			<0xb1d1050 0x8>,
 			<0x00a412c 0x8>;
 		reg-names = "apcs-c1-rcg-base", "apcs-c0-rcg-base",
-			    "apcs-cci-rcg-base", "efuse";
+			    "apcs-cci-rcg-base", "efuse" , "efuse1";
 		vdd-c0-supply = <&apc_vreg_corner>;
 		vdd-c1-supply = <&apc_vreg_corner>;
 		vdd-cci-supply = <&apc_vreg_corner>;
