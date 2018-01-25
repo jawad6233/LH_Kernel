@@ -1,4 +1,4 @@
-NAME ?= Full-LH
+NAME ?= LH-Revolution
 
 VERSION ?= OREO
 
