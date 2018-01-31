@@ -399,20 +399,20 @@ static void get_speed_bin(struct platform_device *pdev, int *bin,
 	void __iomem *base, *base1, *base2;
 	u32 pte_efuse, pte_efuse1, pte_efuse2;
 
-	*bin = 0;
-	*version = 0;
+	*bin = 3;
+	*version = 1;
 
-	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "efuse");
+	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "efuse1");
 	if (!res) {
 		dev_info(&pdev->dev,
-			 "No speed/PVS binning available. Defaulting to 0!\n");
+			 "No speed/PVS binning available. Defaulting to 3!\n");
 		return;
 	}
 
 	base = devm_ioremap(&pdev->dev, res->start, resource_size(res));
 	if (!base) {
 		dev_warn(&pdev->dev,
-			 "Unable to read efuse data. Defaulting to 0!\n");
+			 "Unable to read efuse data. Defaulting to 3!\n");
 		return;
 	}
 
