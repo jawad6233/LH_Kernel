@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016, The Linux Foundation. All rights reserved.
+ * Copyright (c) 2018, The Linux Foundation. All rights reserved.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -38,10 +38,13 @@
 
 &pmi8950_charger {
 	qcom,battery-data = <&qrd_batterydata>;
-	qcom,float-voltage-mv = <4400>;
-	//qcom,chg-led-sw-controls;
-	//qcom,chg-led-support;
-	qcom,thermal-mitigation = <2000 1500 1200 700 0>;
+	qcom,float-voltage-mv = <4450>;
+	qcom,autoadjust-vfloat;
+	qcom,fastchg-current-ma = <2500>;
+	qcom,fastchg-current-comp = <250>;
+	qcom,charging-timeout-mins = <192>;
+	qcom,precharging-timeout-mins = <24>;
+	qcom,thermal-mitigation = <2500 2200 1800 1100 0>;
 	status = "okay";
 };
 
@@ -58,7 +61,10 @@
 	qcom,cl-max-increment-deciperc = <0x1>;
 	qcom,cl-max-decrement-deciperc = <0x1>;
 	qcom,fg-delta-soc = <0x1>;
+	qcom,fg-cc-cv-threshold-mv = <4350>;
 	qcom,bad-battery-detection-enable;
+	qcom,capacity-estimation-on;
+	qcom,esr-pulse-tuning-en;
 	qcom,hold-soc-while-full;
 	qcom,thermal-coefficients = [b7 85 b2 49 71 35];
 };
