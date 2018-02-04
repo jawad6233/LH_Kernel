@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015-2017, The Linux Foundation. All rights reserved.
+ * Copyright (c) 2015-2018, The Linux Foundation. All rights reserved.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -16,9 +16,9 @@
 #include <dt-bindings/regulator/qcom,rpm-smd-regulator.h>
 
 / {
-	model = "Qualcomm Technologies, Inc. MSM8937";
-	compatible = "qcom,msm8937";
-	qcom,msm-id = <294 0x0>;
+	model = "Qualcomm Technologies, Inc. MSM8940";
+	compatible = "qcom,msm8940";
+	qcom,msm-id = <313 0x0>;
 	interrupt-parent = <&intc>;
 
 	chosen {
@@ -648,7 +648,7 @@
 	clock_gcc: qcom,gcc@1800000 {
 		#address-cells = <1>;
 		#size-cells = <1>;
-		compatible = "qcom,gcc-8937";
+		compatible = "qcom,gcc-8940";
 		reg = <0x1800000 0x80000>,
 			<0xb016000 0x00040>,
 			<0xb116000 0x00040>,
@@ -671,7 +671,7 @@
 	};
 
 	clock_debug: qcom,cc-debug@1874000 {
-		compatible = "qcom,cc-debug-8937";
+		compatible = "qcom,cc-debug-8940";
 		reg = <0x1874000 0x4>,
 		      <0xb11101c 0x8>;
 		reg-names = "cc_base", "meas";
@@ -679,7 +679,7 @@
 	};
 
 	clock_gcc_mdss: qcom,gcc-mdss@1800000 {
-		compatible = "qcom,gcc-mdss-8937";
+		compatible = "qcom,gcc-mdss-8940";
 		clocks = <&mdss_dsi0_pll clk_dsi_pll0_pixel_clk_src>,
 			 <&mdss_dsi0_pll clk_dsi_pll0_byte_clk_src>,
 			 <&mdss_dsi1_pll clk_dsi_pll1_pixel_clk_src>,
